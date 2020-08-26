@@ -1,10 +1,18 @@
 call plug#begin("~/.vim/plugged")
   " Plugin Section
+  Plug 'tpope/vim-fugitive'
+  Plug 'preservim/nerdcommenter'
   Plug 'joshdick/onedark.vim'
-  Plug 'scrooloose/nerdtree'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'frazrepo/vim-rainbow'
   Plug 'ryanoasis/vim-devicons'
 
+  " Conflicting binds for ctrl+b
+  " Plug 'yuttie/comfortable-motion.vim'
+  Plug 'scrooloose/nerdtree'
+
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
   Plug 'junegunn/fzf.vim'
   
   Plug 'eraserhd/parinfer-rust'
@@ -14,18 +22,19 @@ call plug#begin("~/.vim/plugged")
 
   Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
   Plug 'ianks/vim-tsx'
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'HerringtonDarkholme/yats.vim'
-
   Plug 'mhartington/nvim-typescript', { 'for': ['typescript', 'tsx'], 'do': './install.sh' }
-  Plug 'Shougo/denite.nvim'
-  Plug 'dense-analysis/ale'
+
+  " Auto complete 
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
   " post install (yarn install | npm install) then load plugin only for
   " editing supported files
   Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+
+  Plug 'Xuyuanp/nerdtree-git-plugin'
 call plug#end()
 
 " Config Section
@@ -33,8 +42,11 @@ if (has("termguicolors"))
   set termguicolors
 endif
 syntax enable
+syntax on
+set encoding=utf8
 colorscheme onedark
 
+set number
 set relativenumber
 
 let g:deoplete#enable_at_startup = 1
@@ -63,6 +75,7 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []
 let g:NERDTreeStatusline = ''
+
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " Toggle
@@ -116,20 +129,46 @@ set softtabstop=2
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
 
-" ALE linting configuration
-let g:ale_linters = {
-\   'javascript': ['eslint'],
-\   'typescript': ['tsserver', 'tslint'],
-\   'vue': ['eslint']
-\}
+" let g:hardtime_default_on = 1
 
-let g:ale_fixers = {
-\    'javascript': ['eslint'],
-\    'typescript': ['prettier'],
-\    'vue': ['eslint'],
-\    'scss': ['prettier'],
-\    'html': ['prettier']
-\}
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+nnoremap <leader>s :Ag<cr>
 
-let g:ale_fix_on_save = 1
-let g:hardtime_default_on = 1
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+" Enable folding with the spacebar
+nnoremap <space> za
+
+let python_highlight_all=1
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" " Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
+
+nnoremap <leader>f :Prettier<cr>
+vnoremap <leader>f :Prettier<cr>
+inoremap <leader>f :Prettier<cr>
+
+" Move lines up/down
+nnoremap <S-k> :m .+1<CR>==
+nnoremap <S-l> :m .-2<CR>==
+vnoremap <S-k> :m '>+1<CR>gv=gv
+vnoremap <S-l> :m '<-2<CR>gv=gv
+
+let g:rainbow_active = 1

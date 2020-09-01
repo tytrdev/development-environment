@@ -1,3 +1,6 @@
+set noswapfile
+set backupcopy=yes
+
 call plug#begin("~/.vim/plugged")
   " Plugin Section
   Plug 'tpope/vim-fugitive'

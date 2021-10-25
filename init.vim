@@ -1,177 +1,136 @@
-set noswapfile
-set backupcopy=yes
+" Base vim/nvim config
+set nocompatible
+set showmatch
+set ignorecase
+set hlsearch
+set incsearch
 
-call plug#begin("~/.vim/plugged")
-  " Plugin Section
-  Plug 'tpope/vim-fugitive'
-  Plug 'preservim/nerdcommenter'
-  Plug 'joshdick/onedark.vim'
-  Plug 'jiangmiao/auto-pairs'
-  Plug 'frazrepo/vim-rainbow'
-  Plug 'ryanoasis/vim-devicons'
-
-  " Conflicting binds for ctrl+b
-  " Plug 'yuttie/comfortable-motion.vim'
-  Plug 'scrooloose/nerdtree'
-
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-  Plug 'junegunn/fzf.vim'
-  
-  Plug 'eraserhd/parinfer-rust'
-
-  Plug 'takac/vim-hardtime'
-  Plug 'itchyny/lightline.vim'
-
-  Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
-  Plug 'ianks/vim-tsx'
-  Plug 'HerringtonDarkholme/yats.vim'
-  Plug 'mhartington/nvim-typescript', { 'for': ['typescript', 'tsx'], 'do': './install.sh' }
-
-  " Auto complete 
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-  " post install (yarn install | npm install) then load plugin only for
-  " editing supported files
-  Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
-
-  Plug 'Xuyuanp/nerdtree-git-plugin'
-call plug#end()
-
-" Config Section
-if (has("termguicolors"))
-  set termguicolors
-endif
-syntax enable
-syntax on
-set encoding=utf8
-colorscheme onedark
+set tabstop=2
+set softtabstop=2
+set expandtab
+set shiftwidth=2
+set autoindent
 
 set number
 set relativenumber
 
-let g:deoplete#enable_at_startup = 1
+set cc=100
+set wildmode=longest,list
 
-" Mappings
-nnoremap <silent><c-s> :<c-u>update<cr>
-vnoremap <silent><c-s> <c-c>:update<cr>gv
-inoremap <silent><c-s> <c-o>:update<cr>
-
-nnoremap <silent><c-q> :<c-u>quit<cr>
-vnoremap <silent><c-q> <c-c>:quit<cr>gv
-inoremap <silent><c-q> <c-o>:quit<cr>
-
-noremap ; l
-noremap l k
-noremap k j
-noremap j h
-
-" TODO: Add maps for moving lines up/down
-
-let g:mapleader = ','
-
-inoremap <leader>d <C-R>=strftime("%Y-%m-%dT%H:%M")<CR> 
-
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = []
-let g:NERDTreeStatusline = ''
-
-" Automaticaly close nvim if NERDTree is only thing left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" Toggle
-nnoremap <silent> <C-b> :NERDTreeToggle<CR>
-
-" open new split panes to right and below
-set splitright
-set splitbelow
-" turn terminal to normal mode with escape
-tnoremap <Esc> <C-\><C-n>
-" start terminal in insert mode
-au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-" open terminal on ctrl+n
-function! OpenTerminal()
-  split term://zsh
-  resize 10
-endfunction
-nnoremap <c-n> :call OpenTerminal()<CR>
-
-" use alt+hjkl to move between split/vsplit panels
-tnoremap <A-j> <C-\><C-n><C-w>h
-tnoremap <A-k> <C-\><C-n><C-w>j
-tnoremap <A-l> <C-\><C-n><C-w>k
-tnoremap <A-;> <C-\><C-n><C-w>l
-nnoremap <A-j> <C-w>h
-nnoremap <A-k> <C-w>j
-nnoremap <A-l> <C-w>k
-nnoremap <A-;> <C-w>l
-
-nnoremap <C-p> :FZF<CR>
-let g:fzf_action = {
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-s': 'split',
-  \ 'ctrl-v': 'vsplit'
-  \}
-
-let g:lightline = {
-  \ 'colorscheme': 'onedark',
-  \ }
-
-" Typescript formatting with prettier
-autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
-
+syntax on
 filetype plugin indent on
-" On pressing tab, insert 2 spaces
-set expandtab
-" show existing tab with 2 spaces width
-set tabstop=2
-set softtabstop=2
 
-" when indenting with '>', use 2 spaces width
-set shiftwidth=2
+set cursorline
+set ttyfast
 
-" let g:hardtime_default_on = 1
+" Plugins
+call plug#begin("~/.vim/plugged")
+  " Colorschemes
+  Plug 'dracula/vim'
+  Plug 'rakr/vim-one'
 
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
-nnoremap <leader>s :Ag<cr>
+  " File tree
+  Plug 'preservim/nerdtree'
 
-" Enable folding
-set foldmethod=indent
-set foldlevel=99
+  " Start page
+  Plug 'mhinz/vim-startify'
 
-" Enable folding with the spacebar
-nnoremap <space> za
+  " Fuzzy finder! New Ctrl+p
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
 
-let python_highlight_all=1
+  " Better status line
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  
+  " Which key! <3
+  Plug 'folke/which-key.nvim'
+  
+  " Better surround semantics for brackets
+  Plug 'tpope/vim-surround'
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+  " Colorful brackets
+  Plug 'frazrepo/vim-rainbow'
 
-" " Copy to clipboard
-vnoremap  <leader>y  "+y
-nnoremap  <leader>Y  "+yg_
-nnoremap  <leader>y  "+y
-nnoremap  <leader>yy  "+yy
+  " Git plugins
+  Plug 'tpope/vim-fugitive'
+  Plug 'airblade/vim-gitgutter'
 
-" " Paste from clipboard
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
-vnoremap <leader>p "+p
-vnoremap <leader>P "+P
+  """ Generic Language Support
+  Plug 'neovim/nvim-lspconfig'
 
-nnoremap <leader>f :Prettier<cr>
-vnoremap <leader>f :Prettier<cr>
-inoremap <leader>f :Prettier<cr>
+  """ Language Specific Stuff
+  Plug 'guns/vim-sexp'
+  Plug 'tpope/vim-sexp-mappings-for-regular-people'
 
-" Move lines up/down
-nnoremap <S-k> :m .+1<CR>==
-nnoremap <S-l> :m .-2<CR>==
-vnoremap <S-k> :m '>+1<CR>gv=gv
-vnoremap <S-l> :m '<-2<CR>gv=gv
+  Plug 'tpope/vim-dispatch'
+  Plug 'radenling/vim-dispatch-neovim'
+  Plug 'clojure-vim/vim-jack-in'
+  Plug 'Olical/conjure', {'tag': 'v4.25.0'}
+call plug#end()
 
-let g:rainbow_active = 1
+" Style
+syntax enable
+" colorscheme dracula
+set background=dark
+let g:one_allow_italics = 1
+let g:airline_theme = 'one'
+colorscheme one
+
+let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+set termguicolors
+
+
+""""""""" Plugin Configuration
+lua << EOF
+require'lspconfig'.clojure_lsp.setup{}
+EOF
+
+lua << EOF
+  require("which-key").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  }
+EOF
+
+""""""""" Keybinds
+
+" Clear Space of any existing keybinds
+nnoremap <SPACE> <Nop>
+
+" Space for mapleader <3
+let mapleader=" "
+let maplocalleader=","
+
+" Vim stuff
+nnoremap <leader>vs :source $MYVIMRC<CR>
+nnoremap <leader>ve :e $MYVIMRC<CR>
+
+" Save/quit
+map <leader>fs :w<CR>
+map <leader>q :q<CR>
+
+" Use ; to open fzf (ctrlp)
+map <leader>fp :Files<CR>
+map ; :Files<CR>
+
+" Use Ctrl+O to open nerd tree
+map <C-o> :NERDTreeToggle<CR>
+map <leader>t :NERDTreeToggle<CR>
+
+" Window and navigation binds
+map <leader>wv <C-w>v
+map <leader>ws <C-w>s
+
+map <leader>wh <C-w>h
+map <leader>wj <C-w>j
+map <leader>wk <C-w>k
+map <leader>wl <C-w>l
+map <leader>wq :q<CR>
+
+" Buffers
+map <leader><Tab> :bp<cr>
+map <leader>bn :bn<cr>
+map <leader>bp :bp<cr>
+map <leader>bd :bd<cr>

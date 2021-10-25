@@ -1,27 +1,7 @@
 # Development Environment
-A personal repository for tracking changes to my development practices. Mainly for sanity.
-I always develop on unix, but this is specifically geared towards mac, which is my
-personal preference.
 
-## Initial Setup
+No one cares! Starting from scratch, rethinking my life.
 
-Install OhMyZsh
-```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-```
-
-Install Homebrew
-```
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-```
-
-Install Vim, MacVim, Wget
-```
-brew install vim macvim wget
-```
-
-Copy .vimrc
-Copy plugins.vim
-Install Plugins
-Download Colorscheme
-Get Fira Code font
+Basically going for Doom Emacs in Vim, but from scratch. SpaceVim is cool but way too
+heavy handed. WIP as I am also trying to get stuff done on some personal projects. I'm just
+adding new things as they come up.
